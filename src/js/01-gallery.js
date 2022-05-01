@@ -1,3 +1,5 @@
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 // Add imports above this line
 import { galleryItems } from './gallery-items';
 // Change code below this line
@@ -7,47 +9,32 @@ const gallery = document.querySelector('.gallery');
 function createImageGallery(galleryItems) {
   return galleryItems
     .map(({ preview, original, description }) => {
-      return `<div class="gallery__item">
-		<a class="gallery__link" href="large-image.jpg">
-		<img 
-		class="gallery__image"
-		src="${preview}"
-		data-source="${original}"
-		alt="${description}"
-		/>
-		</a>
-		</div>`;
+      return `
+          <a class="gallery__item" href="${original}">
+          <img
+          class="gallery__image"
+          src="${preview}" 
+          alt="${description}"
+          style="display: block"
+          />
+        </a>`;
     })
     .join('');
 }
 
 gallery.insertAdjacentHTML('beforeend', createImageGallery(galleryItems));
 
-gallery.addEventListener('click', zoomOnClick);
+var lightbox = new SimpleLightbox('.gallery a', {
+  captions: true,
+  captionsData: 'alt',
+  captionDelay: 250,
+});
 
-function zoomOnClick(e) {
-  const isImgEl = e.target.classList.contains('gallery__image');
-
-  if (!isImgEl) {
-    return;
-  }
-
+const closeImgOnEsc = e => {
   e.preventDefault();
 
-  const largeImgLink = e.target.dataset.source;
-
-  const instance = basicLightbox.create(`
-	<img src="${largeImgLink}" alt="${e.target.alt}">
-	`);
-
-  instance.show();
-
-  const closeImgOnEsc = e => {
-    e.preventDefault();
-
-    if (e.key === 'Escape') {
-      instance.close();
-    }
-  };
-  gallery.addEventListener('keydown', closeImgOnEsc);
-}
+  if (e.key === 'Escape') {
+    instance.close();
+  }
+};
+gallery.addEventListener('keydown', closeImgOnEsc);
