@@ -4,12 +4,12 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 import { galleryItems } from './gallery-items';
 // Change code below this line
 
-const gallery = document.querySelector('.gallery');
+const galleryEl = document.querySelector('.gallery');
 
-function createImageGallery(galleryItems) {
-  return galleryItems
+function makeGallery(galleryArray) {
+  return galleryArray
     .map(({ preview, original, description }) => {
-      return `
+      return `<li>
           <a class="gallery__item" href="${original}">
           <img
           class="gallery__image"
@@ -17,25 +17,15 @@ function createImageGallery(galleryItems) {
           alt="${description}"
           style="display: block"
           />
-        </a>`;
+        </a>
+      </li>`;
     })
     .join('');
 }
-
-gallery.insertAdjacentHTML('beforeend', createImageGallery(galleryItems));
+galleryEl.insertAdjacentHTML('beforeend', makeGallery(galleryItems));
 
 var lightbox = new SimpleLightbox('.gallery a', {
   captions: true,
   captionsData: 'alt',
   captionDelay: 250,
 });
-
-const closeImgOnEsc = e => {
-  e.preventDefault();
-
-  if (e.key === 'Escape') {
-    instance.close();
-  }
-};
-
-gallery.addEventListener('keydown', closeImgOnEsc);
