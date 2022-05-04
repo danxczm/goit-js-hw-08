@@ -37,4 +37,5 @@ const closeImgOnEsc = e => {
     instance.close();
   }
 };
+
 gallery.addEventListener('keydown', closeImgOnEsc);
